@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mortgage-calculator.Console", "mortgage-calculator.Console\mortgage-calculator.Console.csproj", "{0AF76D75-53AA-49F2-9A28-F443F93F39E9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4DFFA426-34AD-418B-B6E5-59171493D64B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mortgage-calculator.Domain", "mortgage-calculator.Domain\mortgage-calculator.Domain.csproj", "{3B5D1737-7B4F-4430-B7C1-69350516A32F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0AF76D75-53AA-49F2-9A28-F443F93F39E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AF76D75-53AA-49F2-9A28-F443F93F39E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AF76D75-53AA-49F2-9A28-F443F93F39E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AF76D75-53AA-49F2-9A28-F443F93F39E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B5D1737-7B4F-4430-B7C1-69350516A32F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B5D1737-7B4F-4430-B7C1-69350516A32F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B5D1737-7B4F-4430-B7C1-69350516A32F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B5D1737-7B4F-4430-B7C1-69350516A32F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0AF76D75-53AA-49F2-9A28-F443F93F39E9} = {4DFFA426-34AD-418B-B6E5-59171493D64B}
+		{3B5D1737-7B4F-4430-B7C1-69350516A32F} = {4DFFA426-34AD-418B-B6E5-59171493D64B}
+	EndGlobalSection
+EndGlobal
