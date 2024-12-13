@@ -6,7 +6,7 @@
 public sealed class AnnuityStrategy : IStrategy
 {
     /// <summary>
-    /// Calculates the monthly payment using the following formula:
+    /// Calculates the indicative gross monthly costs using the following formula:
     /// P = (r * PV) / (1 - (1 + r) ^ -n)
     /// P: Total monthly payment (same every month).
     /// r: Monthly interest rate (annual interest rate divided by 12).
@@ -33,19 +33,19 @@ public sealed class AnnuityStrategy : IStrategy
     /// <param name="loanTermYears"></param>
     public IEnumerable<Installment> CalculateMonthlyInstallments(double loanAmount, double annualInterestRate, int loanTermYears)
     {
+        int totalMonths = loanTermYears * 12;
         double monthlyInterestRate = (annualInterestRate / 100) / 12;
         double monthlyPayment = CalculateMonthlyPayment(loanAmount, annualInterestRate, loanTermYears);
-        double remainingBalance = loanAmount;
-        int numberPayments = loanTermYears * 12;
+        double principal = loanAmount;
 
-        var result = new List<Installment>(numberPayments);
+        var result = new List<Installment>(totalMonths);
         
-        for (int month = 1; month <= numberPayments; month++)
+        for (int month = 1; month <= totalMonths; month++)
         {
-            double interestPayment = monthlyInterestRate * remainingBalance; // The interest on the remaining loan balance for that month.
-            double principalRepayment = monthlyPayment - interestPayment; // The portion of the payment that reduces the loan principal.
-            remainingBalance -= principalRepayment;
-            result.Add(new Installment(month, interestPayment, principalRepayment, remainingBalance));
+            double interest = principal * monthlyInterestRate;
+            double repayment = monthlyPayment - interest;
+            result.Add(new Installment(month, principal, repayment, interest, monthlyPayment));
+            principal -= repayment;
         }
 
         return result;
