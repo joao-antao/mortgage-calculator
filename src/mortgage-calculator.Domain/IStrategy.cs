@@ -2,7 +2,7 @@
 
 public interface IStrategy
 {
-    double GrossMonthlyCost(double loanAmount, double annualInterestRate, int loanTermYears);
-
-    IEnumerable<Installment> GrossMonthlyInstallments(double loanAmount, double annualInterestRate, int loanTermYears);
+    decimal GrossMonthlyCost(decimal loanAmount, decimal interestRate, int loanTermYears);
+    
+    IEnumerable<Instalment> GrossMonthlyInstalments(decimal loanAmount, decimal interestRate, int loanTermYears);
 }

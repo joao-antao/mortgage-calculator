@@ -7,47 +7,53 @@ public sealed class AnnuityStrategy : IStrategy
 {
     /// <summary>
     /// Calculates the indicative gross monthly costs using the following formula:
-    /// P = (r * PV) / (1 - (1 + r) ^ -n)
-    /// P: Total monthly payment (same every month).
-    /// r: Monthly interest rate (annual interest rate divided by 12).
-    /// PV: Loan principal (amount borrowed).
-    /// n: Total number of payments.
+    /// M = P * (r * (1 + r)^n) / ((1 + r)^n - 1)
+    /// M: The gross monthly cost (fixed monthly payment).
+    /// P: The loan amount (or principal).
+    /// r: The monthly interest rate (annual interest rate / 12)
+    /// n: The total number of payments (loan term in years * 12)
     /// </summary>
-    /// <param name="loanAmount">The total debt borrowed from a financial institution.</param>
-    /// <param name="annualInterestRate">The percentage fee charged on a mortgage loan by a financial institution.</param>
+    /// <param name="loanAmount">The total debt borrowed from the mortgage lender.</param>
+    /// <param name="interestRate">The percentage fee charged on a mortgage loan by the mortgage lender.</param>
     /// <param name="loanTermYears">The duration in years to repay the loan.</param>
-    /// <returns></returns>
-    public double GrossMonthlyCost(double loanAmount, double annualInterestRate, int loanTermYears)
+    /// <returns>The indicative gross monthly costs</returns>
+    public decimal GrossMonthlyCost(decimal loanAmount, decimal interestRate, int loanTermYears)
     {
-        double monthlyInterestRate = (annualInterestRate / 100) / 12;
         int totalPayments = loanTermYears * 12;
-        return (monthlyInterestRate * loanAmount) / (1 - Math.Pow(1 + monthlyInterestRate, -totalPayments));
+        decimal monthlyInterestRate = (interestRate / 100) / 12;
+        decimal power = 1;
+
+        for (int i = 0; i < totalPayments; i++)
+            power *= (1 + monthlyInterestRate);
+
+        return loanAmount * (monthlyInterestRate * power) / (power - 1);
     }
     
     /// <summary>
     /// Calculates monthly installments for interest payment and principal payment. The first decreases over time because it is calculated on the remaining balance,
     /// the last increases over time as more of the fixed payment goes towards reducing the loan balance. 
     /// </summary>
-    /// <param name="loanAmount">The total debt borrowed from a financial institution.</param>
-    /// <param name="annualInterestRate">The percentage fee charged on a mortgage loan by a financial institution.</param>
+    /// <param name="loanAmount">The total debt borrowed from the mortgage lender.</param>
+    /// <param name="interestRate">The percentage fee charged on a mortgage loan by the mortgage lender.</param>
     /// <param name="loanTermYears">The duration in years to repay the loan.</param>
-    public IEnumerable<Installment> GrossMonthlyInstallments(double loanAmount, double annualInterestRate, int loanTermYears)
+    /// <returns>The indicative monthly mortgage instalments</returns>
+    public IEnumerable<Instalment> GrossMonthlyInstalments(decimal loanAmount, decimal interestRate, int loanTermYears)
     {
         int totalMonths = loanTermYears * 12;
-        double monthlyInterestRate = (annualInterestRate / 100) / 12;
-        double monthlyPayment = GrossMonthlyCost(loanAmount, annualInterestRate, loanTermYears);
-        double principal = loanAmount;
+        decimal monthlyInterestRate = (interestRate / 100) / 12;
+        decimal monthlyPayment = GrossMonthlyCost(loanAmount, interestRate, loanTermYears);
+        decimal principal = loanAmount;
 
-        var result = new List<Installment>(totalMonths);
+        var instalments = new List<Instalment>(totalMonths);
         
         for (int month = 1; month <= totalMonths; month++)
         {
-            double interest = principal * monthlyInterestRate;
-            double repayment = monthlyPayment - interest;
-            result.Add(new Installment(month, principal, repayment, interest, monthlyPayment));
+            decimal interest = principal * monthlyInterestRate;
+            decimal repayment = monthlyPayment - interest;
+            instalments.Add(new Instalment(month, principal, repayment, interest, monthlyPayment));
             principal -= repayment;
         }
 
-        return result;
+        return instalments;
     }
 }
